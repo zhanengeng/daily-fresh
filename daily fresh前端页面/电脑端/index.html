@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <title>天天生鲜-首页</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="js/slide2.js"></script>
+    <script>
+        $(function(){
+            // $.ajax({
+            //     url:"js/data.json",
+            //     type:"get",
+            //     dataType:"json"
+            // })
+            //     .done(function (data) {
+            //         $(".login_btns").hide();
+            //         $(".user_info em").html(data.name);
+            //         $(".user_info").show();
+            //     })
+            //     .fail(function(){
+            //         alert("链接超时");
+            //     })
+        })    
+    </script>
+</head>
+<body>
+    <!-- 页面顶部 -->
+    <div class="header_con">
+        <div class="header">
+            <div class="welcome fl">欢迎来到天天生鲜！</div>
+            <div class="user_con fr">
+                <ul class="login_btns fl">
+                    <li><a href="#">登录</a></li>
+                    <li><span>|</span></li>
+                    <li><a href="#">注册</a></li>
+                </ul>
+
+                <div class="user_info fl">
+                    欢迎您：<em>用户1</em>
+                </div>
+
+                <ul class="user_btns fl">
+                    <li><span>|</span></li>
+                    <li><a href="#">我的购物车</a></li>
+                    <li><span>|</span></li>
+                    <li><a href="#">我的订单</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- logo，搜索框，购物车 -->
+    <div class="center_con">
+        <a href="index.html" class="logo fl"><img src="images/logo.png" alt="天天生鲜网站logo"></a>
+        <div class="search_con fl">
+            <form>
+                <input type="text" class="input_txt fl" placeholder="搜索">
+                <input type="submit" class="input_sub fl" value="搜索">
+            </form>
+        </div>
+        <div class="chart_con fr">
+            <a href="#" class="chart_link fl">我的购物车</a>
+            <div class="chart_num fl">0</div>
+        </div>
+    </div>
+
+    <!-- 主菜单 -->
+    <div class="main_menu_con">
+         <div class="center_con02">
+             <h2>全部商品分类</h2>
+             <ul>
+                 <li><a href="">首页</a></li>
+                 <span>|</span>
+                 <li><a href="">手机生鲜</a></li>
+                 <span>|</span>
+                 <li><a href="">抽奖</a></li>
+             </ul>
+         </div>
+    </div>
+
+    <div class="center_con03">
+        <div class="sub_menu_con fl">
+            <ul>
+                <li><a href="" class="icon01">新鲜水果</a></li>
+                <li><a href="" class="icon02">海鲜水产</a></li>
+                <li><a href="" class="icon03">猪牛羊肉</a></li>
+                <li><a href="" class="icon04">禽类蛋品</a></li>
+                <li><a href="" class="icon05">新鲜蔬菜</a></li>
+                <li><a href="" class="icon06">速冻食品</a></li>
+            </ul>
+
+
+        </div>
+        <div class="slide_con fl">
+            <ul class="slide">
+                <li><a href="javascript:;"><img src="images/slide.jpg" alt="幻灯片1"></a></li>
+                <li><a href="javascript:;"><img src="images/slide02.jpg" alt="幻灯片2"></a></li>
+                <li><a href="javascript:;"><img src="images/slide03.jpg" alt="幻灯片3"></a></li>
+                <li><a href="javascript:;"><img src="images/slide04.jpg" alt="幻灯片4"></a></li>
+            </ul>
+
+            <!-- 幻灯片箭头 -->
+            <div class="prev"></div>
+            <div class="next"></div>
+
+            <!-- 幻灯片圆点 -->
+            <ul class="points">
+                <!-- <li class="active"></li>
+                <li></li>
+                <li></li>
+                <li></li> -->
+            </ul>
+        </div>
+        <div class="advs fl">
+            <a href=""><img src="images/adv01.jpg" alt="广告图片1"></a>
+            <a href=""><img src="images/adv02.jpg" alt="广告图片2"></a>
+        </div>
+    </div>
+
+    <div class="common_model">
+        <div class="common_title_con">
+            <h3>新鲜水果</h3>
+
+            <ul>
+                <li><span>|</span></li>
+                <li><a href="">苹果</a></li>
+                <li><a href="">梨子</a></li>
+                <li><a href="">提子</a></li>
+            </ul>
+
+            <a href="" class="more fr">查看更多 &gt;</a>
+        </div>
+
+        <div class="goods_banner fl">
+            <a href=""><img src="images/banner01.jpg" alt="banner"></a>
+        </div>
+        <ul class="goods_list fl">
+            <li>
+                <h4>草莓</h4>
+                <a href=""><img src="images/goods/goods003.jpg" alt="商品图片"></a>
+                <div class="price">￥ 30.00</div>
+            </li>
+            <li>
+                <h4>葡萄</h4>
+                <a href=""><img src="images/goods/goods002.jpg" alt="商品图片"></a>
+                <div class="price">￥ 5.00</div>
+            </li>
+            <li>
+                <h4>柠檬</h4>
+                <a href=""><img src="images/goods/goods001.jpg" alt="商品图片"></a>
+                <div class="price">￥ 4.00</div>
+            </li>
+            <li>
+                <h4>奇异果</h4>
+                <a href=""><img src="images/goods/goods012.jpg" alt="商品图片"></a>
+                <div class="price">￥ 25.00</div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="common_model">
+        <div class="common_title_con">
+            <h3>海鲜水产</h3>
+
+            <ul>
+                <li><span>|</span></li>
+                <li><a href="">河虾</a></li>
+                <li><a href="">扇贝</a></li>
+                <li><a href="">海蟹</a></li>
+            </ul>
+
+            <a href="" class="more fr">查看更多 &gt;</a>
+        </div>
+
+        <div class="goods_banner fl">
+            <a href=""><img src="images/banner02.jpg" alt="banner"></a>
+        </div>
+        <ul class="goods_list fl">
+            <li>
+                <h4>大虾</h4>
+                <a href=""><img src="images/goods/goods018.jpg" alt="商品图片"></a>
+                <div class="price">￥ 30.00</div>
+            </li>
+            <li>
+                <h4>扇贝</h4>
+                <a href=""><img src="images/goods/goods019.jpg" alt="商品图片"></a>
+                <div class="price">￥ 5.00</div>
+            </li>
+            <li>
+                <h4>秋刀鱼</h4>
+                <a href=""><img src="images/goods/goods020.jpg" alt="商品图片"></a>
+                <div class="price">￥ 4.00</div>
+            </li>
+            <li>
+                <h4>基围虾</h4>
+                <a href=""><img src="images/goods/goods021.jpg" alt="商品图片"></a>
+                <div class="price">￥ 25.00</div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="common_model">
+        <div class="common_title_con">
+            <h3>猪牛羊肉</h3>
+
+            <ul>
+                <li><span>|</span></li>
+                <li><a href="">猪肉</a></li>
+                <li><a href="">牛肉</a></li>
+                <li><a href="">羊肉</a></li>
+            </ul>
+
+            <a href="" class="more fr">查看更多 &gt;</a>
+        </div>
+
+        <div class="goods_banner fl">
+            <a href=""><img src="images/banner01.jpg" alt="banner"></a>
+        </div>
+        <ul class="goods_list fl">
+            <li>
+                <h4>草莓</h4>
+                <a href=""><img src="images/goods/goods003.jpg" alt="商品图片"></a>
+                <div class="price">￥ 30.00</div>
+            </li>
+            <li>
+                <h4>葡萄</h4>
+                <a href=""><img src="images/goods/goods002.jpg" alt="商品图片"></a>
+                <div class="price">￥ 5.00</div>
+            </li>
+            <li>
+                <h4>柠檬</h4>
+                <a href=""><img src="images/goods/goods001.jpg" alt="商品图片"></a>
+                <div class="price">￥ 4.00</div>
+            </li>
+            <li>
+                <h4>奇异果</h4>
+                <a href=""><img src="images/goods/goods012.jpg" alt="商品图片"></a>
+                <div class="price">￥ 25.00</div>
+            </li>
+        </ul>
+    </div> 
+
+    <div class="footer">
+        <ul>
+            <li><a href="">关于我们</a></li>
+            <li><span>|</span></li>
+            <li><a href="">联系我们</a></li>
+            <li><span>|</span></li>
+            <li><a href="">招聘人才</a></li>
+            <li><span>|</span></li>
+            <li><a href="">友情链接</a></li>
+        </ul>
+        <p>CopyRight © 2020 天天生鲜项目 All Rights Reserved</p>
+        <p>电话：***-******* 京ICP备********号</p>
+    </div>
+</body>
+</html>
