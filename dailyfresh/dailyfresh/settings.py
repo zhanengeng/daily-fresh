@@ -152,3 +152,18 @@ EMAIL_HOST_PASSWORD = 'epwltdybbcushwpb' # google账户取得的应用专用密�
 EMAIL_USE_TLS  = True
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = 'From dailyfresh<zhanengeng@gmail.com>'
+
+# redis作为缓存配置
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",  # 2号数据库作为缓存
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# 配置session储存地点为缓存
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"

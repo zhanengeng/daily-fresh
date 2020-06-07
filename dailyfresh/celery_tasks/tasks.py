@@ -14,7 +14,7 @@ django.setup()
 
 # 创建celery类的实例对象
 #================================
-app = Celery("celery_tasks.tasks", broker="redis://127.0.0.1:6379/1")
+app = Celery("celery_tasks.tasks", broker="redis://127.0.0.1:6379/1") # 1号数据库作为broker
 #================================
 
 

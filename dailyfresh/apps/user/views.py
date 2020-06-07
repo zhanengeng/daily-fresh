@@ -8,9 +8,10 @@ from django.views import View # 导入类视图
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer# 加密用模块
 from itsdangerous import SignatureExpired # 加密过期时的异常
 from django.conf import settings # 导入settings.py.这里用于导入秘钥
-# from django.core.mail import send_mail # 发送邮件模块
-from celery_tasks.tasks import send_register_active_email
-# 导入自定义的celery发送邮件模块
+from celery_tasks.tasks import send_register_active_email # 导入自定义的celery发送邮件模块
+
+# django自带用户验证模块（django文档里找）
+from django.contrib.auth import authenticate, login
 
 import re # 正则
 
@@ -58,7 +59,7 @@ class RegisterView(View):
             # 用户名已存在
             return render(request, "register.html", {"errmsg":"用户名已存在"})
 
-        # 3.业务处理：进行用户注册。利用django自带注册模块
+        # 3.业务处理：进行用户注册。利用django自带注册模块create_user
         # 向数据库写入username，email，password
         user = User.objects.create_user(username, email, password) 
         user.is_active = 0 # 默认是未激活状态，邮件确认后激活
@@ -100,21 +101,60 @@ class ActiveView(View):
             #激活链接已过期。（实际项目中，应该返回一个页面，点击按钮重新发送邮件）
             return HttpResponse("激活链接已过期")
 
+
 # /user/login
 class LoginView(View):
     '''登录页面'''
     def get(self, request):
         '''显示登录页面'''
-        return render(request, "login.html")
+        # 判断是否记住了用户名
+        if "username" in request.COOKIES:
+            username = request.COOKIES.get("username")
+            checked = "checked" # 同时checkbox自动勾选
+        else:
+            username = ""
+            checked = ""
+        
+        # 使用模板
+        return render(request, "login.html",{"username":username, "checked":checked})
 
-# 邮件发送测试用。
-# def sendmsg(request):
-#     subject = "天天生鲜欢迎信息"
-#     message = "邮件正文"
-#     sender = settings.DEFAULT_FROM_EMAIL
-#     receiver_list = ['zhanengeng1@yahoo.co.jp']
-#     try:
-#         send_mail(subject, message, sender, receiver_list)
-#         return HttpResponse("成功发送邮件")
-#     except Exception:
-#         return HttpResponse("失败")
+    def post(self,request):
+        '''进行登录校验'''
+        # 接受数据
+        username = request.POST.get("username")
+        password = request.POST.get("pwd")
+
+        # 校验数据
+        if not all([username, password]):
+            return render(request, "login.html", {"errmsg":"数据不完整"})
+        
+        # 业务处理（用django自带的认证系统）
+        user = authenticate(username=username, password=password) # django会去数据库对比,正确是返回一个用户对象
+        if user is not None:
+            # 用户名或密码正确
+            
+            if user.is_active:
+                # 用户已激活
+                login(request, user) # 在session中记录用户登录状态(django自带)
+
+                # 跳转到首页
+                response = redirect(reverse("goods:index")) # HttpResponseRedirect
+
+                # 判断是否需要记住用户名
+                remember = request.POST.get("remember")
+                if remember == "on":
+                    # 需要记住用户名（cookie）
+                    response.set_cookie("username", username, max_age=7*24*3600)
+                else:
+                    response.delete_cookie("username")
+                # 返回response
+                return response
+                
+            else:
+                # 用户未激活
+                return render(request, "login.html", {"errmsg":"用户未激活，请激活"})
+
+        else:
+            # 用户名或密码错误
+            return render(request, "login.html", {"errmsg":"用户名或密码错误"})
+
