@@ -11,7 +11,8 @@ from django.conf import settings # 导入settings.py.这里用于导入秘钥
 from celery_tasks.tasks import send_register_active_email # 导入自定义的celery发送邮件模块
 
 # django自带用户验证模块（django文档里找）
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout # db查验用户，session记录登录状态, 退出并删除session
+from django.contrib.auth.mixins import LoginRequiredMixin # 拒绝非登录用户访问类视图
 
 import re # 正则
 
@@ -128,6 +129,7 @@ class LoginView(View):
         if not all([username, password]):
             return render(request, "login.html", {"errmsg":"数据不完整"})
         
+        
         # 业务处理（用django自带的认证系统）
         user = authenticate(username=username, password=password) # django会去数据库对比,正确是返回一个用户对象
         if user is not None:
@@ -137,8 +139,11 @@ class LoginView(View):
                 # 用户已激活
                 login(request, user) # 在session中记录用户登录状态(django自带)
 
-                # 跳转到首页
-                response = redirect(reverse("goods:index")) # HttpResponseRedirect
+                # 获取登录后索要跳转的地址(next), 默认跳转到首页reverse("goods:index")
+                next_url = request.GET.get("next", reverse("goods:index"))
+
+                # 跳转到next_url
+                response = redirect(next_url) # HttpResponseRedirect
 
                 # 判断是否需要记住用户名
                 remember = request.POST.get("remember")
@@ -149,7 +154,7 @@ class LoginView(View):
                     response.delete_cookie("username")
                 # 返回response
                 return response
-                
+
             else:
                 # 用户未激活
                 return render(request, "login.html", {"errmsg":"用户未激活，请激活"})
@@ -158,3 +163,36 @@ class LoginView(View):
             # 用户名或密码错误
             return render(request, "login.html", {"errmsg":"用户名或密码错误"})
 
+# user/logout
+class LogoutView(View):
+    def get(self, request):
+        '''退出登录'''
+        # 清楚用户session信息
+        logout(request)
+
+        #跳转到首页
+        return redirect(reverse('goods:index'))
+
+
+# 以下三个页面，用户登录后才能访问，传入LoginRequiredMixin
+# /user
+class UserInfoView(LoginRequiredMixin,View):
+    '''用户中心-信息页面'''
+    def get(self, request):
+        # page='user'
+        return render(request, "User_center_info.html", {"page":"user"})
+
+
+# /user/order
+class UserOrderView(LoginRequiredMixin, View):
+    '''用户中心-订单页面'''
+    def get(self, request):
+        # page='order'
+        return render(request, "User_center_order.html", {"page":"order"})
+
+# /user/address
+class AddressView(LoginRequiredMixin, View):
+    '''用户中心-地址页面'''
+    def get(self, request):
+        # page='address'
+        return render(request, "User_center_site.html",{"page":"address"})
