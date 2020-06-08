@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect # 渲染，重定向
 from django.http import HttpResponse 
 from django.urls import reverse # 反向解析
-from user.models import User # 从模块导入User，用于写入数据库
+from user.models import User, Address # 从模块导入User，用于写入数据库
 from django.views import View # 导入类视图
 
 # 用户激活所需模块
@@ -179,14 +179,21 @@ class LogoutView(View):
 class UserInfoView(LoginRequiredMixin,View):
     '''用户中心-信息页面'''
     def get(self, request):
+        # 获取用户个人信息
+
+        # 获取用户历史浏览
+
         # page='user'
         return render(request, "User_center_info.html", {"page":"user"})
+
 
 
 # /user/order
 class UserOrderView(LoginRequiredMixin, View):
     '''用户中心-订单页面'''
     def get(self, request):
+        # 获取用户订单信息
+
         # page='order'
         return render(request, "User_center_order.html", {"page":"order"})
 
@@ -194,5 +201,55 @@ class UserOrderView(LoginRequiredMixin, View):
 class AddressView(LoginRequiredMixin, View):
     '''用户中心-地址页面'''
     def get(self, request):
-        # page='address'
-        return render(request, "User_center_site.html",{"page":"address"})
+        # 获取用户登录的user对象
+        user = request.user
+        try:
+            # 获取用户默认收货地址
+            address = Address.objects.get(user=user, is_default=True)
+        except Address.DoesNotExist:
+            # 不存在默认收货地址
+            address = None
+        # 使用模板
+        return render(request, "User_center_site.html",{"page":"address","address":address})
+
+    def post(self, request):
+        '''地址添加'''
+        # 接受数据
+        receiver = request.POST.get("receiver")
+        addr = request.POST.get("addr")
+        zip_code = request.POST.get("zip_code")
+        phone = request.POST.get("phone")
+
+        # 校验数据
+        if not all([receiver, addr, phone]):
+            return render(request, "user_center_site.html", {"errmsg":"数据不完整"})
+        # 校验手机号
+        if not re.match(r"^1[3|4|5|7|8][0-9]{9}$", phone):
+            return render(request, "user_center_site.html", {"errmsg":"手机号格式不正确"})
+        # 业务处理：地址添加
+        # 如果用户已存在默认收货地址，添加的地址不作为默认地址，否则作为默认收货地址
+        # 获取用户登录的user对象
+        user = request.user
+        try:
+            address = Address.objects.get(user=user, is_default=True)
+        except Address.DoesNotExist:
+            # 不存在默认收货地址
+            address = None
+
+        if address:
+            # 用户有默认收货地址
+            is_default = False
+        else:
+            # 用户没有默认地址，则此次上传地址作为默认
+            is_default = True
+
+        # 添加地址
+        Address.objects.create(user=user, 
+                                receiver=receiver, 
+                                addr=addr, 
+                                zip_code=zip_code,
+                                phone=phone, 
+                                is_default=is_default)
+
+        # 返回应答,刷新地址页面
+        return redirect(reverse("user:address")) # get方式访问
