@@ -1,1 +1,2 @@
-project of django
+a project by django
+like amazon fresh shopping
