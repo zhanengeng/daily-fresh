@@ -1,5 +1,5 @@
 ## instructions
-a project by django
+a django project
 
 ## functions
  1. register
