@@ -11,6 +11,19 @@ class User(AbstractUser, BaseModel):
         verbose_name = "用户" # 后台显示方式
         verbose_name_plural = verbose_name
 
+
+class AddressManager(models.Manager):
+    '''地址模型管理器类'''
+    def get_default_address(self, user):
+        # 获取用户默认收货地址:Address.objects.get_default_address(user)
+        try:
+            address = self.get(user=user, is_default=True)
+        except self.model.DoesNotExist:
+            # 不存在默认收货地址
+            address = None
+        return address
+
+
 class Address(BaseModel):
     '''地址模型类'''
     user = models.ForeignKey('User', verbose_name='所属账户', on_delete=models.CASCADE)
@@ -19,6 +32,9 @@ class Address(BaseModel):
     zip_code = models.CharField(max_length=6, null=True, verbose_name='邮政编码')
     phone = models.CharField(max_length=11, verbose_name='联系电话')
     is_default = models.BooleanField(default=False, verbose_name='默认地址')
+
+    # 自定义一个模型管理器对象
+    objects = AddressManager()
 
     class Meta:
         db_table = "df_address"

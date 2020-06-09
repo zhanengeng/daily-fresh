@@ -180,11 +180,13 @@ class UserInfoView(LoginRequiredMixin,View):
     '''用户中心-信息页面'''
     def get(self, request):
         # 获取用户个人信息
+        user = request.user
+        address = Address.objects.get_default_address(user)
 
         # 获取用户历史浏览
 
-        # page='user'
-        return render(request, "User_center_info.html", {"page":"user"})
+        # page='user'用于定位所显示页面
+        return render(request, "User_center_info.html", {"page":"user", "address":address})
 
 
 
@@ -203,12 +205,14 @@ class AddressView(LoginRequiredMixin, View):
     def get(self, request):
         # 获取用户登录的user对象
         user = request.user
-        try:
-            # 获取用户默认收货地址
-            address = Address.objects.get(user=user, is_default=True)
-        except Address.DoesNotExist:
-            # 不存在默认收货地址
-            address = None
+        # try:
+        #     # 获取用户默认收货地址
+        #     address = Address.objects.get(user=user, is_default=True)
+        # except Address.DoesNotExist:
+        #     # 不存在默认收货地址
+        #     address = None
+        address = Address.objects.get_default_address(user)
+
         # 使用模板
         return render(request, "User_center_site.html",{"page":"address","address":address})
 
@@ -226,15 +230,17 @@ class AddressView(LoginRequiredMixin, View):
         # 校验手机号
         if not re.match(r"^1[3|4|5|7|8][0-9]{9}$", phone):
             return render(request, "user_center_site.html", {"errmsg":"手机号格式不正确"})
+
         # 业务处理：地址添加
         # 如果用户已存在默认收货地址，添加的地址不作为默认地址，否则作为默认收货地址
         # 获取用户登录的user对象
         user = request.user
-        try:
-            address = Address.objects.get(user=user, is_default=True)
-        except Address.DoesNotExist:
-            # 不存在默认收货地址
-            address = None
+        # try:
+        #     address = Address.objects.get(user=user, is_default=True)
+        # except Address.DoesNotExist:
+        #     # 不存在默认收货地址
+        #     address = None
+        address = Address.objects.get_default_address(user)
 
         if address:
             # 用户有默认收货地址
