@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect # 渲染，重定向
 from django.http import HttpResponse 
 from django.urls import reverse # 反向解析
 from user.models import User, Address # 从模块导入User，用于写入数据库
+from goods.models import GoodsSKU #导入商品SKU类
 from django.views import View # 导入类视图
 
 # 用户激活所需模块
@@ -13,6 +14,9 @@ from celery_tasks.tasks import send_register_active_email # 导入自定义的ce
 # django自带用户验证模块（django文档里找）
 from django.contrib.auth import authenticate, login, logout # db查验用户，session记录登录状态, 退出并删除session
 from django.contrib.auth.mixins import LoginRequiredMixin # 拒绝非登录用户访问类视图
+from django_redis import get_redis_connection # 链接redis原生客户端（for 储存浏览记录）
+
+
 
 import re # 正则
 
@@ -183,10 +187,25 @@ class UserInfoView(LoginRequiredMixin,View):
         user = request.user
         address = Address.objects.get_default_address(user)
 
-        # 获取用户历史浏览
+        # 获取用户历史浏览(Redis数据库)
+        # from redis import StrictRedis
+        # StrictRedis(host="127.0.0.1", port="6379" ,db=2) # redis的2号数据库保存用户浏览信息
+        con = get_redis_connection("default") # default是setting里设定的redis数据库信息。con得到StrictRedis对象，用的2号数据库
+        history_key = f"history_{user.id}" # 人为设定redis中储存格式为history_id:[1，2，3]
+        # 获取用户最新浏览的5条商品id（看redis与python交互）
+        sku_ids = con.lrange(history_key, 0, 4) # 向con传入key，得到一个浏览记录id列表
+        # 从mysql数据库中查询用户浏览商品的具体信息,为了保证顺序不乱，使用以下遍历的方法获得商品实例对象
+        goods_li = []
+        for id in sku_ids:
+            goods = GoodsSKU.objects.get(id=id)
+            goods_li.append(goods)
+        
+        context = {"page":"user", 
+                    "address":address,
+                    "goods_li":goods_li}
 
         # page='user'用于定位所显示页面
-        return render(request, "User_center_info.html", {"page":"user", "address":address})
+        return render(request, "User_center_info.html", context)
 
 
 

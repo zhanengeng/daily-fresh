@@ -153,7 +153,7 @@ EMAIL_USE_TLS  = True
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = 'From dailyfresh<zhanengeng@gmail.com>'
 
-# redis作为缓存配置
+# redis作为缓存配置,用于储存session，和用户浏览信息
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -168,4 +168,4 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-LOGIN_URL = "/user/login"  # 默认是/accounts/login
+LOGIN_URL = "/user/login"  # 默认原为是/accounts/login
