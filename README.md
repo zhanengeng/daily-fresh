@@ -2,11 +2,10 @@
 a django project
 
 ## functions
- 1. register
+ 1. register，and send a message to activate an account。
  2. login/logout
- 3. user_center: info ,order ,address
- 4. index：can_order
- 5. 
+ 3. user_center: info page,order page,address page
+
 
 ## virtualenv info:
 |Package   |Version  |
@@ -30,8 +29,8 @@ sqlparse      | 0.3.1
 vine          | 1.3.0  
 
 ## 页面说明：
-1.index.html   网站首页，顶部“注册|登录”和用户信息是切换显示的，商品分类菜单点击直接链接滚动到本页面商品模块。首页已加入幻灯片效果　
-2.list.html  商品列表页，商品分类菜单鼠标悬停时切换显示和隐藏，点击菜单后链接到对应商品的列表页。　
+ 1.index.html   网站首页，顶部“注册|登录”和用户信息是切换显示的，商品分类菜单点击直接链接滚动到本页面商品模块。首页已加入幻灯片效果　
+ 2.list.html  商品列表页，商品分类菜单鼠标悬停时切换显示和隐藏，点击菜单后链接到对应商品的列表页。　
 3.detail.html  商品详情页，某一件商品的详细信息。　　
 4.cart.html 我的购物车页，列出已放入购物车上的商品　　
 5.place_order.html 提交订单页　　
